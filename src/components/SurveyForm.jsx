@@ -2,7 +2,7 @@ import { useState } from "react";
 import MovieList from "./MovieList";
 import validateEmail from "@/utils/validateEmail";
 
-function SurveyForm() {
+function SurveyForm({ onSubmit }) {
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState(false);
   const [email, setEmail] = useState("");
@@ -36,7 +36,13 @@ function SurveyForm() {
 
     if (!hasErrors) {
       const data = { name, email, movie, comment };
-      alert(JSON.stringify(data));
+      
+      
+      if (onSubmit) {
+        onSubmit(data);
+      }
+      
+      
       setName("");
       setEmail("");
       setMovie("");
@@ -58,16 +64,17 @@ function SurveyForm() {
   }
 
   return (
-    <div className="flex flex-col gap-2 justify-center items-center">
-      <h1 className="text-2xl font-bold">สำรวจความชอบภาพยนตร์</h1>
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h1 className="text-2xl font-bold text-center mb-6">สำรวจความชอบภาพยนตร์</h1>
       <form
-        className="flex flex-col gap-2 items-start"
+        className="flex flex-col gap-2"
         onSubmit={(event) => {
           submitHandler(event);
         }}
       >
         <label htmlFor="name">Name</label>
         <input
+          id="name"
           className="border-2 border-gray-300 rounded-md p-2 w-full"
           name="name"
           value={name}
@@ -75,9 +82,10 @@ function SurveyForm() {
             setName(event.target.value);
           }}
         />
-        {nameError && <p className="text-red-500">Name is required</p>}
+        {nameError ? <p className="text-red-500">Name is required</p> : <p className="text-red-500 invisible">placeholder</p>}
         <label htmlFor="email">email</label>
         <input
+          id="email"
           className="border-2 border-gray-300 rounded-md p-2 w-full"
           name="email"
           value={email}
@@ -85,14 +93,15 @@ function SurveyForm() {
             setEmail(event.target.value);
           }}
         />
-        {emailError && <p className="text-red-500">Invalid email</p>}
+        {emailError ? <p className="text-red-500">Invalid email</p> : <p className="text-red-500 invisible">placeholder</p>}
 
         <label htmlFor="movie">Movie</label>
         <MovieList movie={movie} setMovie={setMovie} />
-        {movieError && <p className="text-red-500">Movie is required</p>}
+        {movieError ? <p className="text-red-500">Movie is required</p> : <p className="text-red-500 invisible">placeholder</p>}
 
         <label htmlFor="comment">comment</label>
         <input
+          id="comment"
           className="border-2 border-gray-300 rounded-md p-2 w-full"
           name="comment"
           value={comment}
@@ -101,11 +110,11 @@ function SurveyForm() {
           }}
         />
 
-        <button className="bg-blue-500 p-2 rounded-md w-full" type="submit">
+        <button className="bg-blue-500 text-white p-2 rounded-md w-full hover:bg-blue-600 transition-colors" type="submit">
           Submit
         </button>
         <button
-          className="bg-red-300 p-2 rounded-md w-full"
+          className="bg-red-500 text-white p-2 rounded-md w-full hover:bg-red-600 transition-colors"
           type="button"
           onClick={() => {
             clearHandler();
