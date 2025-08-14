@@ -1,17 +1,31 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import { Button } from "@/components/ui/button";
 import SurveyForm from "@/components/SurveyForm";
+import ResultForm from "@/components/ResultForm";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [formData, setFormData] = useState(null);
+  const [showResult, setShowResult] = useState(false);
+
+  const handleFormSubmit = (data) => {
+    setFormData(data);
+    setShowResult(true);
+  };
+
+  const handleBackToForm = () => {
+    setShowResult(false);
+    setFormData(null);
+  };
 
   return (
-    <>
-      <SurveyForm />
-    </>
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+      <div className="w-full max-w-md">
+        {!showResult ? (
+          <SurveyForm onSubmit={handleFormSubmit} />
+        ) : (
+          <ResultForm data={formData} onBack={handleBackToForm} />
+        )}
+      </div>
+    </div>
   );
 }
 
